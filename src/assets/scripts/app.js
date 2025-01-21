@@ -9,7 +9,7 @@
 //     age,
 //     name,
 // } from "./util.js";
-import * as util from "./util.js";
+// import * as util from "./util.js";
 
 // const numbers = [2, 4, 8];
 // console.log(util.addNums(numbers));
@@ -37,15 +37,15 @@ import * as util from "./util.js";
 
 // console.log(1 === "1");
 
-let password = "";
-// password = prompt("password?");
+// let password = "";
+// // password = prompt("password?");
 
-console.log("test 1");
+// console.log("test 1");
 
-if (password === "123") {
-    console.log("access granted");
-} else {
-    console.log("access not granted");
-}
+// if (password === "123") {
+//     console.log("access granted");
+// } else {
+//     console.log("access not granted");
+// }
 
 console.log("test 2");

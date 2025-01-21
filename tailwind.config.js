@@ -3,6 +3,10 @@ export default {
     content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
     theme: {
         extend: {},
+        fontFamily: {
+            Quicksand: ["Quicksand", "sans serif"],
+            RobotoCondensed: ["Roboto Condensed", "sans serif"],
+        },
     },
     plugins: [],
 };
