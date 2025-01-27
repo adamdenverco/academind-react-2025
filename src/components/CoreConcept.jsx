@@ -1,7 +1,7 @@
 import React from "react";
 
 const CoreConcept = ({ concept }) => {
-    console.log("concept", concept);
+    // console.log("concept", concept);
     return (
         <li>
             <img src={concept.image} alt={concept.title} />
