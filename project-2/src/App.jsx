@@ -2,25 +2,22 @@
 // import reactLogo from "./assets/react.svg";
 // import viteLogo from "/vite.svg";
 import "./App.css";
+import Player from "./components/Player";
 
 function App() {
-    const [count, setCount] = useState(0);
+    // const [count, setCount] = useState(0);
 
     return (
-        <>
-            <main>
-                <ol className="bogus">
-                    <li>
-                        <span className="player-name">Player 1</span>
-                        <span className="player-symbol">X</span>
-                    </li>
-                    <li>
-                        <span className="player-name">Player 2</span>
-                        <span className="player-symbol">O</span>
-                    </li>
+        <main>
+            <div id="game-container">
+                <ol id="players">
+                    <Player name="Player 1" symbol="x" />
+                    <Player name="Player 2" symbol="0" />
                 </ol>
-            </main>
-        </>
+                GAME BOARD
+            </div>
+            LOG
+        </main>
     );
 }
 
