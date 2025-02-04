@@ -5,50 +5,85 @@ import "./App.css";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import Log from "./components/Log";
+import GameOver from "./components/GameOver";
 
 let initialGameBoard = [
     [null, null, null],
     [null, null, null],
     [null, null, null],
 ];
+
 function App() {
-    // const [count, setCount] = useState(0);
-    const [whoseTurn, setWhoseTurn] = useState("X");
+    // const [whoseTurn, setWhoseTurn] = useState("X");
     const [gameTurns, setGameTurns] = useState([]);
     const [playStatus, setPlayStatus] = useState(null);
-    const [myGameBoard, setMyGameBoard] = useState(initialGameBoard);
 
-    // const setWhoseTurnFunc = (symbol) => {
-    //     setWhoseTurn(symbol);
-    // };
+    const findActivePlayer = () => {
+        return gameTurns.length > 0 && gameTurns[0].player === "X" ? "O" : "X";
+    };
 
-    // console.log("whoseTurn", whoseTurn);
+    let whoseTurn = findActivePlayer();
 
-    const handleClick = (clickRowIndex, clickColumnIndex) => {
+    const handleClick = (rowIndex, columnIndex) => {
         if (playStatus !== null) {
             return;
         }
-        if (myGameBoard[clickRowIndex][clickColumnIndex] !== null) {
+
+        let newGameBoard = createGameBoard(gameTurns);
+
+        if (newGameBoard[rowIndex][columnIndex] !== null) {
             return;
         }
 
-        let tempBoard = [...myGameBoard.map((innerArray) => [...innerArray])];
-        tempBoard[clickRowIndex][clickColumnIndex] = whoseTurn;
-        setMyGameBoard(tempBoard);
-        // setGameTurns();
+        let currentPlayer = findActivePlayer();
 
-        if (didSomeoneWin()) {
+        console.log("currentPlayer", currentPlayer);
+
+        let updatedTurns = [
+            {
+                tile: { row: rowIndex, col: columnIndex },
+                player: currentPlayer,
+            },
+            ...gameTurns,
+        ];
+        console.log("updatedTurns", updatedTurns);
+        setGameTurns(updatedTurns);
+
+        newGameBoard = createGameBoard(updatedTurns);
+        console.log("newGameBoard 111", newGameBoard);
+
+        console.log("newGameBoard", newGameBoard);
+
+        if (determineWinnerOrDraw(newGameBoard, currentPlayer)) {
+            // someone won or it's a draw
             return;
         }
 
-        setWhoseTurn(whoseTurn === "X" ? "O" : "X");
+        let nextPlayer = currentPlayer === "X" ? "O" : "X";
+        whoseTurn = nextPlayer;
+
+        console.log(
+            `Looks like ${currentPlayer} din't win. It's now ${nextPlayer}'s turn.`
+        );
     };
 
-    const didSomeoneWin = () => {
-        const winValue = whoseTurn + whoseTurn + whoseTurn;
-        const tempBoard = [
-            ...myGameBoard.map((InternalArray) => [...InternalArray]),
+    const createGameBoard = (updatedTurns) => {
+        let newGameBoard = [
+            ...initialGameBoard.map((innerArray) => [...innerArray]),
         ];
+        for (let index = 0; index < updatedTurns.length; index++) {
+            let rowIndex = updatedTurns[index].tile.row;
+            let colIndex = updatedTurns[index].tile.col;
+            newGameBoard[rowIndex][colIndex] = updatedTurns[index].player;
+        }
+        return newGameBoard;
+    };
+
+    const determineWinnerOrDraw = (newGameBoard, currentPlayer) => {
+        const winValue = currentPlayer + currentPlayer + currentPlayer;
+        const tempBoard = newGameBoard;
+        console.log("Did Someone Win?");
+        console.log("tempBoard", tempBoard);
         if (
             tempBoard[0][0] + tempBoard[1][0] + tempBoard[2][0] === winValue ||
             tempBoard[0][1] + tempBoard[1][1] + tempBoard[2][1] === winValue ||
@@ -59,15 +94,25 @@ function App() {
             tempBoard[0][0] + tempBoard[1][1] + tempBoard[2][2] === winValue ||
             tempBoard[0][2] + tempBoard[1][1] + tempBoard[2][0] === winValue
         ) {
-            setPlayStatus(`Congrats! ${whoseTurn} won`);
+            console.log(`Looks like ${currentPlayer} won!`);
+            setPlayStatus(`Congrats! ${currentPlayer} won`);
+            return true;
+        } else if (
+            tempBoard[0].includes(null) === false &&
+            tempBoard[1].includes(null) === false &&
+            tempBoard[2].includes(null) === false
+        ) {
+            console.log(`No spaces left. It's a draw!`);
+            setPlayStatus(`No spaces left. It's a draw!`);
             return true;
         }
         return false;
     };
 
     const resetTheGame = () => {
-        setMyGameBoard(initialGameBoard);
-        setWhoseTurn("X");
+        console.log("set gameTurns []");
+        setGameTurns([]);
+        console.log("set playStatus null");
         setPlayStatus(null);
     };
 
@@ -78,16 +123,23 @@ function App() {
                     <Player name="Player 1" symbol="X" whoseTurn={whoseTurn} />
                     <Player name="Player 2" symbol="O" whoseTurn={whoseTurn} />
                 </ol>
+                {playStatus === null ? (
+                    ""
+                ) : (
+                    <GameOver
+                        playStatus={playStatus}
+                        resetTheGame={resetTheGame}
+                    />
+                )}
                 <GameBoard
                     whoseTurn={whoseTurn}
-                    setWhoseTurn={setWhoseTurn}
                     handleClick={handleClick}
                     playStatus={playStatus}
-                    setPlayStatus={setPlayStatus}
-                    myGameBoard={myGameBoard}
+                    gameTurns={gameTurns}
+                    createGameBoard={createGameBoard}
                 />
             </div>
-            <Log />
+            <Log gameTurns={gameTurns} />
         </main>
     );
 }

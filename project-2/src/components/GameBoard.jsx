@@ -1,31 +1,29 @@
 import React, { useState } from "react";
 import Tile from "./Tile";
 
+// let initialGameBoard = [
+//     [null, null, null],
+//     [null, null, null],
+//     [null, null, null],
+// ];
+
 const GameBoard = ({
     whoseTurn,
-    setWhoseTurn,
     handleClick,
     playStatus,
-    setPlayStatus,
-    myGameBoard,
+    gameTurns,
+    createGameBoard,
 }) => {
+    console.log("gameTurns", gameTurns);
+    let updatedGameBoard = createGameBoard(gameTurns);
+    console.log("updatedGameBoard", updatedGameBoard);
+
     return (
         <div>
             <h2>Gameboard</h2>
-            <div>
-                {playStatus ? (
-                    <>
-                        {playStatus}{" "}
-                        <button onClick={() => resetTheGame()}>
-                            Play Again
-                        </button>
-                    </>
-                ) : (
-                    `It is now ${whoseTurn}'s turn`
-                )}
-            </div>
+            {playStatus ? "" : <div>It is now {whoseTurn}'s turn</div>}
             <ol id="game-board">
-                {myGameBoard.map((row, rowIndex) => (
+                {updatedGameBoard.map((row, rowIndex) => (
                     <li key={rowIndex}>
                         <ol>
                             {row.map((playerSymbol, columnIndex) => (
@@ -35,7 +33,6 @@ const GameBoard = ({
                                     columnIndex={columnIndex}
                                     playerSymbol={playerSymbol}
                                     handleClick={handleClick}
-                                    whoseTurn={whoseTurn}
                                 />
                             ))}
                         </ol>

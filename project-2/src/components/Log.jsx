@@ -1,12 +1,19 @@
 import React from "react";
 
-const Log = () => {
+const Log = ({ gameTurns }) => {
     return (
         <>
             <ol id="log">
-                <li>log 1</li>
-                <li>log 2</li>
-                <li>log 2</li>
+                {gameTurns.map((gameTurn, index) => {
+                    console.log("gameTurn", gameTurn);
+                    let rowIndex = gameTurn.tile.row;
+                    return (
+                        <li key={index}>
+                            Player {gameTurn.player} chose row{" "}
+                            {gameTurn.tile.row}, column {gameTurn.tile.col}
+                        </li>
+                    );
+                })}
             </ol>
         </>
     );
